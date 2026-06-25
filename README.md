@@ -69,7 +69,7 @@ cd nx-postprocessors/postprocessor-python-<name>   # e.g. postprocessor-python-w
 | [`stress-dashboard`](postprocessor-python-stress-dashboard) | 8120 | Stress-test dashboard (Nx Meta + Nx Witness): total/per-channel inference FPS and CPU/RAM/GPU/NPU load; named runs, HTML+CSV reports (pass-through) |
 | [`gauge-dashboard`](postprocessor-python-gauge-dashboard) | 8082 | Reads numeric gauge values from a vision model; live analog gauge, trend chart, alert thresholds |
 | [`dice-dashboard`](postprocessor-python-dice-dashboard) | 8081 | Classifies dice rolls (Big / Small / Triple / Unknown) with a live dashboard, history, and prize wheel |
-| [`parking-dashboard`](postprocessor-python-parking-dashboard) | — | Parking occupancy dashboard (work in progress — no README yet) |
+| [`parking-dashboard`](postprocessor-python-parking-dashboard) | 8114 | Maps Car/Bus/Truck detections to 6 parking spaces (P1–P6); live occupancy map, per-space duration, Mark Free override, usage stats |
 
 All postprocessors are Python **external postprocessors** for NX AI Manager. They
 receive per-frame detection metadata from the AI pipeline; the AI model itself runs
@@ -145,4 +145,10 @@ transparent pass-through (does not modify inference results).
 
 ### postprocessor-python-parking-dashboard
 
-Parking occupancy dashboard. **Work in progress** — code only, no README yet.
+Maps vehicle detections (Car / Bus / Truck) to six parking spaces (P1–P6) by
+horizontal position and serves a live occupancy dashboard: per-space state and
+duration, a manual **Mark Free** override, and usage statistics. Occupancy uses
+a 3 s vacate timeout + 2 min cooldown to avoid flicker. See
+[its README](postprocessor-python-parking-dashboard/README.md).
+
+**Port:** 8114
