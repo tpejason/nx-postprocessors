@@ -1,0 +1,103 @@
+# NX Postprocessors
+
+Custom postprocessors for NX AI Manager.
+
+## Credentials & Security
+
+> ⚠️ These postprocessors ship with **default placeholder credentials** for demo
+> convenience (e.g. `admin` / `admin`, SSH `<SSH_PASSWORD>`). **Change them to your own
+> credentials before any real deployment.**
+
+- Set Nx Server URL, username, and password in each postprocessor's
+  `plugin.*.ini` config file (see the `.ini.example` templates).
+- Deploy scripts (`deploy.sh`) take the SSH user/password as arguments — do not
+  hard-code production secrets.
+- Never commit a populated `.ini`, `.db`, or `.log` file. These are excluded via
+  `.gitignore`; keep runtime data out of the repository.
+
+## Postprocessors
+
+| Postprocessor | Port | Purpose |
+|---------------|------|---------|
+| [`web-dashboard-advance`](postprocessor-python-web-dashboard-advance) | 8112 | Advanced multi-camera real-time dashboard: position heatmap, object counts, timeline, filtering, CSV export |
+| [`vlm-web`](postprocessor-python-vlm-web) | 8115 | Feeds detection metadata to a VLM (Ollama) for image description/analysis, served via a web app |
+| [`stress-dashboard`](postprocessor-python-stress-dashboard) | 8120 | Stress-test dashboard (Nx Meta + Nx Witness): total/per-channel inference FPS and CPU/RAM/GPU/NPU load; named runs, HTML+CSV reports (pass-through) |
+| [`gauge-dashboard`](postprocessor-python-gauge-dashboard) | 8082 | Reads numeric gauge values from a vision model; live analog gauge, trend chart, alert thresholds |
+| [`dice-dashboard`](postprocessor-python-dice-dashboard) | 8081 | Classifies dice rolls (Big / Small / Triple / Unknown) with a live dashboard, history, and prize wheel |
+| [`parking-dashboard`](postprocessor-python-parking-dashboard) | — | Parking occupancy dashboard (work in progress — no README yet) |
+
+All postprocessors are Python **external postprocessors** for NX AI Manager. They
+receive per-frame detection metadata from the AI pipeline; the AI model itself runs
+inside NX AI Manager / Cloud Pipelines, not in the postprocessor.
+
+> **Demo assets:** the demo `.onnx` models (and any sample clips) are large
+> binaries and are **not tracked in git** — keep them locally (e.g. under an
+> `aim-models/` directory) or distribute them via Git LFS / a separate share.
+
+---
+
+### postprocessor-python-web-dashboard-advance
+
+Advanced real-time web dashboard for NX AI Manager.
+
+- Multi-camera support
+- Dark neon theme
+- Per-camera position heatmap with RTSP thumbnail background
+- Object count cards, pie chart, timeline
+- Time + object type filtering
+- CSV export
+
+**Port:** 8112  
+**Dashboard URL:** `http://<server-ip>:8112`
+
+#### Setup
+
+1. Build and install via CMake
+2. Register in `external_postprocessors.json`
+3. Open dashboard and set RTSP URL per camera (gear icon) to enable heatmap backgrounds
+
+---
+
+### postprocessor-python-gauge-dashboard
+
+Reads numeric gauge values from a vision model and serves a real-time dashboard
+with a live analog gauge, trend chart, and configurable Normal/High/Low alert
+thresholds. See [its README](postprocessor-python-gauge-dashboard/README.md).
+
+**Port:** 8082 · **Demo model:** `models/gauge.onnx` · **Demo clip:** `samples/gauge.mp4`
+
+---
+
+### postprocessor-python-dice-dashboard
+
+Classifies dice rolls (Big / Small / Triple / Unknown) from a dice-pip vision
+model and serves a live dashboard with roll history, cumulative tally, and a
+prize wheel. See [its README](postprocessor-python-dice-dashboard/README.md).
+
+**Port:** 8081 · **Demo model:** `models/dice.onnx`
+
+---
+
+### postprocessor-python-vlm-web
+
+Forwards detection metadata to a VLM (via Ollama) for image description /
+analysis and presents results in a web app.
+
+**Port:** 8115
+
+---
+
+### postprocessor-python-stress-dashboard
+
+Stress-testing dashboard for NX AI Manager (Nx Meta and Nx Witness). Reports
+total and per-channel inference FPS plus CPU / RAM / GPU / NPU load, records
+named stress runs, and exports HTML + CSV reports. The postprocessor is a
+transparent pass-through (does not modify inference results).
+
+**Port:** 8120
+
+---
+
+### postprocessor-python-parking-dashboard
+
+Parking occupancy dashboard. **Work in progress** — code only, no README yet.

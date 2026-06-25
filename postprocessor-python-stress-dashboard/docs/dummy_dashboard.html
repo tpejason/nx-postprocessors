@@ -1,0 +1,155 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+:root{
+  --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --border:#2a3340;
+  --txt:#e6edf3; --muted:#8b949e; --accent:#2f81f7; --good:#3fb950;
+  --warn:#d29922; --bad:#f85149; --fps:#a371f7; --cpu:#2f81f7;
+  --igpu:#3fb950; --npu:#db61a2; --nv:#76e3ea; --ram:#d29922;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:14px}
+h1,h2,h3{margin:0 0 .4em}
+a{color:var(--accent);text-decoration:none}
+header{padding:14px 20px;background:var(--panel);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+header .title{font-size:18px;font-weight:600}
+.badges{display:flex;gap:6px;flex-wrap:wrap}
+.badge{font-size:11px;padding:2px 8px;border-radius:10px;background:var(--panel2);
+  border:1px solid var(--border);color:var(--muted)}
+.badge.on{color:var(--good);border-color:#1f5e2e}
+.badge.off{color:var(--muted);opacity:.6}
+.wrap{padding:18px 20px;max-width:1400px;margin:0 auto}
+.grid{display:grid;gap:14px}
+.cards{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px}
+.gauge .lbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.gauge .val{font-size:30px;font-weight:700;line-height:1.1;margin-top:4px}
+.gauge .val small{font-size:14px;font-weight:500;color:var(--muted)}
+.gauge .sub{font-size:11px;color:var(--muted);margin-top:4px;min-height:14px}
+.bar{height:6px;border-radius:3px;background:var(--panel2);margin-top:8px;overflow:hidden}
+.bar > div{height:100%;background:var(--accent);width:0;transition:width .4s}
+.fps .val{color:var(--fps)} .fps .bar>div{background:var(--fps)}
+.cpu .bar>div{background:var(--cpu)} .ram .bar>div{background:var(--ram)}
+.igpu .bar>div{background:var(--igpu)} .npu .bar>div{background:var(--npu)}
+.nv .bar>div{background:var(--nv)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--border)}
+th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.4px}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+input,textarea,button{font-family:inherit;font-size:13px}
+input,textarea{background:var(--panel2);border:1px solid var(--border);color:var(--txt);
+  border-radius:6px;padding:6px 8px}
+button{background:var(--accent);color:#fff;border:0;border-radius:6px;padding:7px 14px;
+  cursor:pointer;font-weight:600}
+button.stop{background:var(--bad)} button.ghost{background:var(--panel2);color:var(--txt);border:1px solid var(--border)}
+button:disabled{opacity:.5;cursor:not-allowed}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.sec-title{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:22px 0 8px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:var(--muted)}
+.dot.live{background:var(--bad);animation:pulse 1.2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:6px}
+.legend span{display:flex;align-items:center;gap:5px}
+.legend i{width:12px;height:3px;border-radius:2px;display:inline-block}
+canvas{width:100%;display:block}
+.mini{font-size:11px;color:var(--muted)}
+</style></head><body>
+<header><div class="title">Nx&nbsp;AI&nbsp;Manager · Stress&nbsp;Dashboard</div>
+<div class="badges">
+<span class="badge on">CPU/RAM</span><span class="badge on">iGPU · engine</span>
+<span class="badge on">NPU</span><span class="badge off">NVIDIA</span><span class="badge on">root</span></div>
+<div style="flex:1"></div><div class="mini">nx-Dell-Pro-Micro-Plus-QBM1250</div></header>
+<div class="wrap">
+<div class="panel"><div class="row" style="justify-content:space-between">
+<h3 style="margin:0"><span class="dot live"></span><span>Recording: People Detection HA — 16ch CPU</span></h3>
+<div class="mini">model people-detection-ha  ·  1080p  ·  FPS 94.8 · 16 cams</div></div>
+<div class="row" style="margin-top:10px">
+<input value="People Detection HA — 16ch CPU" style="min-width:200px">
+<input value="people-detection-ha" style="min-width:160px">
+<input value="1080p" style="width:150px">
+<input value="Intel CPU inference" style="flex:1;min-width:160px">
+<button class="stop">■ Stop run</button></div></div>
+<div class="grid cards" style="margin-top:14px"><div class="panel gauge fps"><div class="lbl">Total inference FPS</div><div class="val">94.8</div><div class="sub">16 channel(s)</div></div><div class="panel gauge cpu"><div class="lbl">CPU</div><div class="val">82.3<small> %</small></div><div class="sub"></div><div class="bar"><div style="width:82.3%"></div></div></div><div class="panel gauge ram"><div class="lbl">RAM</div><div class="val">46.1<small> %</small></div><div class="sub">7.2 / 15.6 GB</div><div class="bar"><div style="width:46.1%"></div></div></div><div class="panel gauge igpu"><div class="lbl">Intel iGPU</div><div class="val">3.1<small> %</small></div><div class="sub">engine · 350 MHz</div><div class="bar"><div style="width:3.1%"></div></div></div><div class="panel gauge npu"><div class="lbl">Intel NPU</div><div class="val">0.0<small> %</small></div><div class="sub">0 MHz · 0.0 MB</div><div class="bar"><div style="width:0.0%"></div></div></div></div>
+<div class="sec-title">Live timeline</div>
+<div class="panel"><div class="legend">
+<span><i style="background:var(--fps)"></i>Total FPS</span><span><i style="background:var(--cpu)"></i>CPU %</span>
+<span><i style="background:var(--igpu)"></i>iGPU %</span><span><i style="background:var(--npu)"></i>NPU %</span>
+<span><i style="background:var(--nv)"></i>NVIDIA %</span></div><canvas id="chart"></canvas></div>
+<div class="sec-title">Per-camera inference FPS</div>
+<div class="panel"><table><thead><tr><th>Camera</th><th>Channel ID</th>
+<th class="num">Resolution</th><th class="num">FPS</th><th style="width:30%"></th></tr></thead>
+<tbody><tr><td><input value="Back Exit" style="width:140px"></td><td class="mini">a1b43634…</td><td class="num">1280×720</td><td class="num"><b>5.62</b></td><td><div class="bar"><div style="width:86.72839506172839%;background:var(--fps)"></div></div></td></tr>
+<tr><td><input value="Cafeteria" style="width:140px"></td><td class="mini">a1b3d967…</td><td class="num">1920×1080</td><td class="num"><b>5.37</b></td><td><div class="bar"><div style="width:82.87037037037037%;background:var(--fps)"></div></div></td></tr>
+<tr><td><input value="Corridor 1" style="width:140px"></td><td class="mini">a1b35dab…</td><td class="num">1920×1080</td><td class="num"><b>6.37</b></td><td><div class="bar"><div style="width:98.30246913580247%;background:var(--fps)"></div></div></td></tr>
+<tr><td><input value="Corridor 2" style="width:140px"></td><td class="mini">a1b37c9a…</td><td class="num">1920×1080</td><td class="num"><b>6.39</b></td><td><div class="bar"><div style="width:98.6111111111111%;background:var(--fps)"></div></div></td></tr>
+<tr><td><input value="Elevator Hall" style="width:140px"></td><td class="mini">a1b3f856…</td><td class="num">1920×1080</td><td class="num"><b>5.54</b></td><td><div class="bar"><div style="width:85.49382716049382%;background:var(--fps)"></div></div></td></tr>
+<tr><td><input value="Loading Dock" style="width:140px"></td><td class="mini">a1b3ba78…</td><td class="num">1280×720</td><td class="num"><b>6.24</b></td><td><div class="bar"><div style="width:96.29629629629629%;background:var(--fps)"></div></div></td></tr>
+<tr><td><input value="Lobby" style="width:140px"></td><td class="mini">a1b2e1ef…</td><td class="num">1920×1080</td><td class="num"><b>5.49</b></td><td><div class="bar"><div style="width:84.72222222222221%;background:var(--fps)"></div></div></td></tr>
+<tr><td><input value="Main Entrance" style="width:140px"></td><td class="mini">a1b2c300…</td><td class="num">1280×720</td><td class="num"><b>6.1</b></td><td><div class="bar"><div style="width:94.1358024691358%;background:var(--fps)"></div></div></td></tr>
+<tr><td><input value="Parking A" style="width:140px"></td><td class="mini">a1b31fcd…</td><td class="num">1920×1080</td><td class="num"><b>5.51</b></td><td><div class="bar"><div style="width:85.03086419753086%;background:var(--fps)"></div></div></td></tr>
+<tr><td><input value="Parking B" style="width:140px"></td><td class="mini">a1b33ebc…</td><td class="num">1280×720</td><td class="num"><b>6.48</b></td><td><div class="bar"><div style="width:100.0%;background:var(--fps)"></div></div></td></tr>
+<tr><td><input value="Perimeter N" style="width:140px"></td><td class="mini">a1b47412…</td><td class="num">1920×1080</td><td class="num"><b>6.4</b></td><td><div class="bar"><div style="width:98.76543209876543%;background:var(--fps)"></div></div></td></tr>
+<tr><td><input value="Perimeter S" style="width:140px"></td><td class="mini">a1b49301…</td><td class="num">1920×1080</td><td class="num"><b>6.26</b></td><td><div class="bar"><div style="width:96.60493827160494%;background:var(--fps)"></div></div></td></tr>
+<tr><td><input value="Reception" style="width:140px"></td><td class="mini">a1b300de…</td><td class="num">1920×1080</td><td class="num"><b>5.98</b></td><td><div class="bar"><div style="width:92.28395061728395%;background:var(--fps)"></div></div></td></tr>
+<tr><td><input value="Server Room" style="width:140px"></td><td class="mini">a1b45523…</td><td class="num">1920×1080</td><td class="num"><b>5.77</b></td><td><div class="bar"><div style="width:89.0432098765432%;background:var(--fps)"></div></div></td></tr>
+<tr><td><input value="Stairwell" style="width:140px"></td><td class="mini">a1b41745…</td><td class="num">1920×1080</td><td class="num"><b>5.9</b></td><td><div class="bar"><div style="width:91.04938271604938%;background:var(--fps)"></div></div></td></tr>
+<tr><td><input value="Warehouse" style="width:140px"></td><td class="mini">a1b39b89…</td><td class="num">1920×1080</td><td class="num"><b>5.38</b></td><td><div class="bar"><div style="width:83.02469135802468%;background:var(--fps)"></div></div></td></tr></tbody></table></div>
+<div class="sec-title">Saved runs</div>
+<div class="panel"><table><thead><tr><th>#</th><th>Name</th><th>Model</th><th class="num">Cams</th>
+<th class="num">Dur</th><th class="num">Samples</th><th>Status</th><th>Report</th><th></th></tr></thead>
+<tbody>
+<tr><td>3</td><td>People Detection HA — 16ch CPU</td><td>people-detection-ha</td><td class="num">16</td><td class="num">live</td><td class="num">142</td><td><span class="dot live"></span>live</td><td><a>HTML</a> · <a>CSV</a></td><td><button class="ghost">✕</button></td></tr>
+<tr><td>2</td><td>People Detection HA — 8ch CPU</td><td>people-detection-ha</td><td class="num">8</td><td class="num">5m0s</td><td class="num">300</td><td>completed</td><td><a>HTML</a> · <a>CSV</a></td><td><button class="ghost">✕</button></td></tr>
+<tr><td>1</td><td>People Detection (fast) — 16ch CPU</td><td>people-detection-fast</td><td class="num">16</td><td class="num">3m0s</td><td class="num">180</td><td>completed</td><td><a>HTML</a> · <a>CSV</a></td><td><button class="ghost">✕</button></td></tr>
+</tbody></table></div>
+</div>
+<script>
+function fmt(n){ if(n==null) return '–'; return (Math.round(n*10)/10).toString(); }
+function drawChart(cv, series, lines, opts){
+  opts = opts||{};
+  const dpr = window.devicePixelRatio||1;
+  const W = cv.clientWidth, H = opts.height||220;
+  cv.width = W*dpr; cv.height = H*dpr; cv.style.height = H+'px';
+  const ctx = cv.getContext('2d'); ctx.scale(dpr,dpr);
+  ctx.clearRect(0,0,W,H);
+  const padL=44, padR=44, padT=12, padB=22;
+  const plotW=W-padL-padR, plotH=H-padT-padB;
+  // axes ranges
+  let leftMax=1;
+  lines.filter(l=>l.axis==='left').forEach(l=>{
+    series.forEach(s=>{ const v=s[l.key]; if(v!=null&&v>leftMax) leftMax=v; });
+  });
+  leftMax = Math.ceil(leftMax*1.15) || 1;
+  const rightMax=100;
+  const n=series.length;
+  const x = i => padL + (n<=1?plotW/2:plotW*i/(n-1));
+  const yL = v => padT + plotH - plotH*(v/leftMax);
+  const yR = v => padT + plotH - plotH*(v/rightMax);
+  // grid + right axis labels (%)
+  ctx.strokeStyle='#2a3340'; ctx.fillStyle='#8b949e'; ctx.font='10px sans-serif';
+  ctx.lineWidth=1;
+  for(let g=0; g<=4; g++){
+    const yy=padT+plotH*g/4; ctx.beginPath(); ctx.moveTo(padL,yy); ctx.lineTo(W-padR,yy); ctx.stroke();
+    ctx.textAlign='right'; ctx.fillText(Math.round(rightMax*(1-g/4))+'%', W-6, yy+3);
+    ctx.textAlign='left'; ctx.fillText(fmt(leftMax*(1-g/4)), 4, yy+3);
+  }
+  // lines
+  lines.forEach(l=>{
+    const Y = l.axis==='left'?yL:yR;
+    ctx.beginPath(); ctx.strokeStyle=l.color; ctx.lineWidth=1.8;
+    let started=false;
+    series.forEach((s,i)=>{ const v=s[l.key]; if(v==null){return;}
+      const px=x(i), py=Y(v);
+      if(!started){ctx.moveTo(px,py);started=true;} else ctx.lineTo(px,py);
+    });
+    ctx.stroke();
+  });
+}
+
+function g(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+drawChart(document.getElementById('chart'), [{"fps_total": 84.6, "cpu_pct": 80.5, "igpu_pct": 2.6, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 86.1, "cpu_pct": 79.2, "igpu_pct": 1.6, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 86.4, "cpu_pct": 80.1, "igpu_pct": 2.2, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 87.0, "cpu_pct": 81.5, "igpu_pct": 3.1, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 87.8, "cpu_pct": 82.0, "igpu_pct": 3.1, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 88.5, "cpu_pct": 82.3, "igpu_pct": 1.9, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 89.1, "cpu_pct": 80.8, "igpu_pct": 3.3, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 89.7, "cpu_pct": 82.9, "igpu_pct": 2.1, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 90.4, "cpu_pct": 80.9, "igpu_pct": 4.3, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 92.2, "cpu_pct": 81.1, "igpu_pct": 3.9, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 93.0, "cpu_pct": 80.9, "igpu_pct": 4.4, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 92.9, "cpu_pct": 81.3, "igpu_pct": 2.7, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 93.9, "cpu_pct": 83.9, "igpu_pct": 3.6, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 94.1, "cpu_pct": 83.2, "igpu_pct": 2.3, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 94.5, "cpu_pct": 84.4, "igpu_pct": 3.1, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 95.7, "cpu_pct": 81.5, "igpu_pct": 4.3, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 97.2, "cpu_pct": 81.8, "igpu_pct": 3.9, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 96.1, "cpu_pct": 84.8, "igpu_pct": 2.0, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 96.3, "cpu_pct": 84.0, "igpu_pct": 3.5, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 96.0, "cpu_pct": 84.6, "igpu_pct": 3.3, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 96.0, "cpu_pct": 83.5, "igpu_pct": 2.5, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 96.0, "cpu_pct": 83.6, "igpu_pct": 1.5, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 97.1, "cpu_pct": 84.5, "igpu_pct": 3.3, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 96.4, "cpu_pct": 81.9, "igpu_pct": 2.5, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 96.1, "cpu_pct": 82.2, "igpu_pct": 1.5, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 95.5, "cpu_pct": 82.5, "igpu_pct": 1.9, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 94.5, "cpu_pct": 81.5, "igpu_pct": 1.7, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 94.5, "cpu_pct": 83.1, "igpu_pct": 3.8, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 94.2, "cpu_pct": 80.6, "igpu_pct": 3.8, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 94.3, "cpu_pct": 82.8, "igpu_pct": 2.8, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 93.5, "cpu_pct": 81.3, "igpu_pct": 1.6, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 92.5, "cpu_pct": 81.6, "igpu_pct": 3.9, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 90.5, "cpu_pct": 81.5, "igpu_pct": 3.8, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 89.9, "cpu_pct": 81.9, "igpu_pct": 1.9, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 89.7, "cpu_pct": 81.2, "igpu_pct": 2.4, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 90.1, "cpu_pct": 79.5, "igpu_pct": 2.1, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 88.1, "cpu_pct": 81.1, "igpu_pct": 4.3, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 87.8, "cpu_pct": 80.1, "igpu_pct": 1.7, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 87.0, "cpu_pct": 81.6, "igpu_pct": 2.0, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 86.3, "cpu_pct": 79.0, "igpu_pct": 4.4, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 86.0, "cpu_pct": 77.9, "igpu_pct": 4.4, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 85.0, "cpu_pct": 81.1, "igpu_pct": 2.2, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 85.3, "cpu_pct": 78.9, "igpu_pct": 1.9, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 83.7, "cpu_pct": 79.4, "igpu_pct": 4.0, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 84.0, "cpu_pct": 77.9, "igpu_pct": 3.6, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 84.0, "cpu_pct": 76.7, "igpu_pct": 3.4, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 82.8, "cpu_pct": 77.0, "igpu_pct": 4.2, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 82.2, "cpu_pct": 76.7, "igpu_pct": 2.7, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 83.0, "cpu_pct": 76.9, "igpu_pct": 3.9, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 83.2, "cpu_pct": 76.8, "igpu_pct": 3.7, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 82.9, "cpu_pct": 79.3, "igpu_pct": 4.1, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 83.5, "cpu_pct": 75.4, "igpu_pct": 4.2, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 82.7, "cpu_pct": 77.9, "igpu_pct": 3.7, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 83.3, "cpu_pct": 77.3, "igpu_pct": 4.4, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 83.1, "cpu_pct": 75.9, "igpu_pct": 2.1, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 83.0, "cpu_pct": 75.7, "igpu_pct": 1.7, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 85.2, "cpu_pct": 76.9, "igpu_pct": 2.7, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 85.0, "cpu_pct": 77.8, "igpu_pct": 4.1, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 85.4, "cpu_pct": 78.3, "igpu_pct": 1.8, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 87.1, "cpu_pct": 77.4, "igpu_pct": 2.1, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 88.3, "cpu_pct": 76.2, "igpu_pct": 2.0, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 87.5, "cpu_pct": 78.3, "igpu_pct": 3.2, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 88.1, "cpu_pct": 78.0, "igpu_pct": 1.6, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 88.8, "cpu_pct": 75.7, "igpu_pct": 4.1, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 90.4, "cpu_pct": 78.9, "igpu_pct": 2.2, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 91.0, "cpu_pct": 76.3, "igpu_pct": 2.1, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 92.8, "cpu_pct": 76.2, "igpu_pct": 2.8, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 92.4, "cpu_pct": 79.7, "igpu_pct": 2.8, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 92.8, "cpu_pct": 76.9, "igpu_pct": 2.6, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 94.1, "cpu_pct": 77.0, "igpu_pct": 2.5, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 95.7, "cpu_pct": 78.1, "igpu_pct": 2.6, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 94.5, "cpu_pct": 78.4, "igpu_pct": 2.0, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 95.7, "cpu_pct": 80.5, "igpu_pct": 2.6, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 96.7, "cpu_pct": 80.8, "igpu_pct": 2.4, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 95.5, "cpu_pct": 81.4, "igpu_pct": 4.0, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 96.2, "cpu_pct": 78.3, "igpu_pct": 2.4, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 95.6, "cpu_pct": 80.8, "igpu_pct": 1.8, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 97.0, "cpu_pct": 81.5, "igpu_pct": 3.7, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 96.1, "cpu_pct": 78.8, "igpu_pct": 4.3, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 96.8, "cpu_pct": 82.8, "igpu_pct": 3.0, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 96.4, "cpu_pct": 80.5, "igpu_pct": 1.6, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 96.6, "cpu_pct": 79.6, "igpu_pct": 3.8, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 95.7, "cpu_pct": 81.1, "igpu_pct": 3.2, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 95.2, "cpu_pct": 81.2, "igpu_pct": 1.7, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 94.9, "cpu_pct": 82.2, "igpu_pct": 3.3, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 94.8, "cpu_pct": 80.9, "igpu_pct": 4.4, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 93.0, "cpu_pct": 81.5, "igpu_pct": 3.1, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 92.9, "cpu_pct": 82.1, "igpu_pct": 3.4, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 91.6, "cpu_pct": 83.5, "igpu_pct": 4.1, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 90.3, "cpu_pct": 83.0, "igpu_pct": 2.4, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 90.4, "cpu_pct": 83.0, "igpu_pct": 4.0, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 89.7, "cpu_pct": 84.8, "igpu_pct": 2.7, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 88.5, "cpu_pct": 81.6, "igpu_pct": 4.5, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 88.7, "cpu_pct": 82.9, "igpu_pct": 4.4, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 87.2, "cpu_pct": 81.6, "igpu_pct": 3.6, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 86.4, "cpu_pct": 84.1, "igpu_pct": 3.7, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 85.8, "cpu_pct": 82.1, "igpu_pct": 1.9, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 85.7, "cpu_pct": 83.7, "igpu_pct": 1.9, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 84.7, "cpu_pct": 84.4, "igpu_pct": 2.9, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 85.0, "cpu_pct": 82.4, "igpu_pct": 3.0, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 84.7, "cpu_pct": 81.1, "igpu_pct": 2.0, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 83.2, "cpu_pct": 81.8, "igpu_pct": 2.2, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 82.7, "cpu_pct": 81.6, "igpu_pct": 1.9, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 82.5, "cpu_pct": 83.7, "igpu_pct": 1.7, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 81.5, "cpu_pct": 83.3, "igpu_pct": 2.9, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 82.4, "cpu_pct": 83.6, "igpu_pct": 1.6, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 83.7, "cpu_pct": 80.4, "igpu_pct": 3.1, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 82.1, "cpu_pct": 82.7, "igpu_pct": 2.8, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 82.0, "cpu_pct": 80.4, "igpu_pct": 3.9, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 83.1, "cpu_pct": 81.0, "igpu_pct": 4.4, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 84.4, "cpu_pct": 81.0, "igpu_pct": 1.9, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 84.1, "cpu_pct": 80.4, "igpu_pct": 4.1, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 84.9, "cpu_pct": 79.7, "igpu_pct": 2.3, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 85.0, "cpu_pct": 78.6, "igpu_pct": 2.5, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 86.3, "cpu_pct": 79.9, "igpu_pct": 3.4, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 86.4, "cpu_pct": 79.5, "igpu_pct": 3.0, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 86.2, "cpu_pct": 80.5, "igpu_pct": 2.3, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 87.6, "cpu_pct": 77.7, "igpu_pct": 3.0, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 88.6, "cpu_pct": 76.9, "igpu_pct": 4.3, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 89.5, "cpu_pct": 79.5, "igpu_pct": 3.0, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 90.5, "cpu_pct": 79.1, "igpu_pct": 3.5, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 89.8, "cpu_pct": 76.9, "igpu_pct": 2.8, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 91.1, "cpu_pct": 77.5, "igpu_pct": 1.9, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 91.2, "cpu_pct": 78.3, "igpu_pct": 3.9, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 93.6, "cpu_pct": 76.6, "igpu_pct": 2.6, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 94.3, "cpu_pct": 77.1, "igpu_pct": 3.0, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 95.1, "cpu_pct": 77.5, "igpu_pct": 3.4, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 94.8, "cpu_pct": 77.6, "igpu_pct": 3.2, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 94.6, "cpu_pct": 77.1, "igpu_pct": 2.9, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 95.7, "cpu_pct": 76.0, "igpu_pct": 2.7, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 95.4, "cpu_pct": 76.3, "igpu_pct": 2.9, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 96.5, "cpu_pct": 75.5, "igpu_pct": 2.4, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 96.2, "cpu_pct": 75.2, "igpu_pct": 2.6, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 96.2, "cpu_pct": 75.7, "igpu_pct": 2.9, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 97.0, "cpu_pct": 76.2, "igpu_pct": 4.5, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 96.4, "cpu_pct": 75.3, "igpu_pct": 2.6, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 97.1, "cpu_pct": 78.6, "igpu_pct": 2.2, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 96.4, "cpu_pct": 79.1, "igpu_pct": 2.5, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 95.3, "cpu_pct": 77.6, "igpu_pct": 3.0, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 94.6, "cpu_pct": 79.2, "igpu_pct": 2.3, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 94.2, "cpu_pct": 75.7, "igpu_pct": 3.6, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 94.1, "cpu_pct": 77.9, "igpu_pct": 1.5, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 93.6, "cpu_pct": 77.1, "igpu_pct": 1.8, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 93.7, "cpu_pct": 76.6, "igpu_pct": 3.0, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 93.0, "cpu_pct": 76.5, "igpu_pct": 1.7, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 91.4, "cpu_pct": 79.1, "igpu_pct": 4.0, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 90.8, "cpu_pct": 77.5, "igpu_pct": 4.4, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 89.8, "cpu_pct": 78.9, "igpu_pct": 2.6, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 88.7, "cpu_pct": 80.7, "igpu_pct": 3.2, "npu_pct": 0.0, "nvidia_pct": null}, {"fps_total": 88.7, "cpu_pct": 79.4, "igpu_pct": 2.3, "npu_pct": 0.0, "nvidia_pct": null}], [
+ {key:'fps_total',color:g('--fps'),axis:'left'},
+ {key:'cpu_pct',color:g('--cpu'),axis:'right'},
+ {key:'igpu_pct',color:g('--igpu'),axis:'right'},
+ {key:'npu_pct',color:g('--npu'),axis:'right'}],{height:240});
+</script></body></html>

@@ -1,0 +1,6 @@
+[common]
+log_level = INFO
+
+[web_app]
+# URL of the parking dashboard web app
+url = http://localhost:8114

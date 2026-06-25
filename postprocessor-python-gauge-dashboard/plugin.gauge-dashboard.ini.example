@@ -1,0 +1,27 @@
+[common]
+# Logging level: DEBUG | INFO | WARNING | ERROR
+log_level = INFO
+
+[detection]
+# Minimum detection confidence (0.0 – 1.0). Detections below this are discarded.
+confidence_threshold = 0.5
+# IoU threshold for non-maximum suppression.
+nms_iou_threshold = 0.5
+
+[gauge]
+# Physical range of the gauge (in the unit below).
+min_value = 0.0
+max_value = 100.0
+# Unit label displayed on the dashboard (e.g. %, PSI, °C, bar).
+unit = %
+# Alert thresholds — readings outside [alert_low, alert_high] are flagged.
+alert_low = 20.0
+alert_high = 80.0
+
+[dashboard]
+# TCP port for the web dashboard.
+port = 8082
+# Maximum number of readings kept in the history ring buffer.
+history_size = 200
+# Number of readings shown in the trend chart.
+trend_size = 60

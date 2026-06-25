@@ -1,0 +1,18 @@
+[common]
+log_level = INFO
+
+[web_app]
+url = http://localhost:8112
+
+[web_server]
+port = 8112
+timeline_capacity = 50000
+scatter_capacity = 5000
+
+# Nx connection used to capture per-camera heatmap thumbnails via the REST image
+# endpoint (bearer-token auth). Required for the "Capture thumbnail from Nx" (📷)
+# button to work, and works even when the Nx server has Basic/Digest auth disabled.
+[nx]
+url = https://127.0.0.1:7001
+user = admin
+password =

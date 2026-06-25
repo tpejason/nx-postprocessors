@@ -1,0 +1,176 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stress Report — People Detection HA — 16ch CPU</title>
+<style>
+:root{
+  --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --border:#2a3340;
+  --txt:#e6edf3; --muted:#8b949e; --accent:#2f81f7; --good:#3fb950;
+  --warn:#d29922; --bad:#f85149; --fps:#a371f7; --cpu:#2f81f7;
+  --igpu:#3fb950; --npu:#db61a2; --nv:#76e3ea; --ram:#d29922;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:14px}
+h1,h2,h3{margin:0 0 .4em}
+a{color:var(--accent);text-decoration:none}
+header{padding:14px 20px;background:var(--panel);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+header .title{font-size:18px;font-weight:600}
+.badges{display:flex;gap:6px;flex-wrap:wrap}
+.badge{font-size:11px;padding:2px 8px;border-radius:10px;background:var(--panel2);
+  border:1px solid var(--border);color:var(--muted)}
+.badge.on{color:var(--good);border-color:#1f5e2e}
+.badge.off{color:var(--muted);opacity:.6}
+.wrap{padding:18px 20px;max-width:1400px;margin:0 auto}
+.grid{display:grid;gap:14px}
+.cards{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px}
+.gauge .lbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.gauge .val{font-size:30px;font-weight:700;line-height:1.1;margin-top:4px}
+.gauge .val small{font-size:14px;font-weight:500;color:var(--muted)}
+.gauge .sub{font-size:11px;color:var(--muted);margin-top:4px;min-height:14px}
+.bar{height:6px;border-radius:3px;background:var(--panel2);margin-top:8px;overflow:hidden}
+.bar > div{height:100%;background:var(--accent);width:0;transition:width .4s}
+.fps .val{color:var(--fps)} .fps .bar>div{background:var(--fps)}
+.cpu .bar>div{background:var(--cpu)} .ram .bar>div{background:var(--ram)}
+.igpu .bar>div{background:var(--igpu)} .npu .bar>div{background:var(--npu)}
+.nv .bar>div{background:var(--nv)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--border)}
+th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.4px}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+input,textarea,button{font-family:inherit;font-size:13px}
+input,textarea{background:var(--panel2);border:1px solid var(--border);color:var(--txt);
+  border-radius:6px;padding:6px 8px}
+button{background:var(--accent);color:#fff;border:0;border-radius:6px;padding:7px 14px;
+  cursor:pointer;font-weight:600}
+button.stop{background:var(--bad)} button.ghost{background:var(--panel2);color:var(--txt);border:1px solid var(--border)}
+button:disabled{opacity:.5;cursor:not-allowed}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.sec-title{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:22px 0 8px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:var(--muted)}
+.dot.live{background:var(--bad);animation:pulse 1.2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:6px}
+.legend span{display:flex;align-items:center;gap:5px}
+.legend i{width:12px;height:3px;border-radius:2px;display:inline-block}
+canvas{width:100%;display:block}
+.mini{font-size:11px;color:var(--muted)}
+
+.report{max-width:1000px;margin:0 auto;padding:24px}
+.kv td:first-child{color:var(--muted);width:160px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:780px){.two{grid-template-columns:1fr}}
+h1{font-size:22px}
+</style></head><body><div class="report">
+<h1>Nx AI Manager · Stress-Test Report</h1>
+<div class="mini">Generated 2026-06-08 20:47:48</div>
+
+<div class="sec-title">Run configuration</div>
+<div class="panel"><table class="kv"><tr><td>Run name</td><td>People Detection HA — 16ch CPU</td></tr><tr><td>Model</td><td>people-detection-ha (high accuracy)</td></tr><tr><td>Cameras</td><td>16</td></tr><tr><td>Resolution</td><td>1920×1080</td></tr><tr><td>Notes</td><td>Intel CPU inference (Core Ultra 7 265)</td></tr><tr><td>Host</td><td>nx-Dell-Pro-Micro-Plus-QBM1250</td></tr><tr><td>Started</td><td>2026-06-08 20:44:48</td></tr><tr><td>Duration</td><td>180.0 s</td></tr><tr><td>Samples</td><td>180</td></tr></table></div>
+
+<div class="sec-title">Summary (avg / peak / min / p95)</div>
+<div class="panel"><table>
+<thead><tr><th>Metric</th><th class="num">Avg</th><th class="num">Peak</th><th class="num">Min</th><th class="num">P95</th></tr></thead>
+<tbody><tr><td>Total inference FPS</td><td class='num'>89.39</td><td class='num'>97.74</td><td class='num'>81.26</td><td class='num'>96.48</td></tr>
+<tr><td>CPU load</td><td class='num'>80.41%</td><td class='num'>84.9%</td><td class='num'>75.3%</td><td class='num'>84.1%</td></tr>
+<tr><td>RAM used</td><td class='num'>7200.15 MB</td><td class='num'>7397.9 MB</td><td class='num'>7000 MB</td><td class='num'>7385.8 MB</td></tr>
+<tr><td>RAM load</td><td class='num'>44.99%</td><td class='num'>46.5%</td><td class='num'>43.5%</td><td class='num'>46.4%</td></tr>
+<tr><td>Intel iGPU load</td><td class='num'>2.94%</td><td class='num'>4.5%</td><td class='num'>1.5%</td><td class='num'>4.3%</td></tr>
+<tr><td>Intel NPU load</td><td class='num'>0%</td><td class='num'>0%</td><td class='num'>0%</td><td class='num'>0%</td></tr>
+<tr><td>Intel NPU memory</td><td class='num'>0 MB</td><td class='num'>0 MB</td><td class='num'>0 MB</td><td class='num'>0 MB</td></tr></tbody></table></div>
+
+<div class="sec-title">Per-camera inference FPS (avg / peak / min / p95)</div>
+<div class="panel"><table>
+<thead><tr><th>Camera</th><th>Channel ID</th><th class="num">Avg</th><th class="num">Peak</th><th class="num">Min</th><th class="num">P95</th></tr></thead>
+<tbody><tr><td>Main Entrance</td><td class='mini'>a1b2c300-c000-e000-0000-000000000000</td><td class='num'>6.06</td><td class='num'>6.78</td><td class='num'>5.36</td><td class='num'>6.63</td></tr>
+<tr><td>Lobby</td><td class='mini'>a1b2e1ef-c001-e00d-001d-0000000f4243</td><td class='num'>4.93</td><td class='num'>5.68</td><td class='num'>4.22</td><td class='num'>5.57</td></tr>
+<tr><td>Reception</td><td class='mini'>a1b300de-c002-e01a-003a-0000001e8486</td><td class='num'>5.38</td><td class='num'>6.07</td><td class='num'>4.67</td><td class='num'>5.92</td></tr>
+<tr><td>Parking A</td><td class='mini'>a1b31fcd-c003-e027-0057-0000002dc6c9</td><td class='num'>5.3</td><td class='num'>6.03</td><td class='num'>4.64</td><td class='num'>5.9</td></tr>
+<tr><td>Parking B</td><td class='mini'>a1b33ebc-c004-e034-0074-0000003d090c</td><td class='num'>6.24</td><td class='num'>6.95</td><td class='num'>5.49</td><td class='num'>6.82</td></tr>
+<tr><td>Corridor 1</td><td class='mini'>a1b35dab-c005-e041-0091-0000004c4b4f</td><td class='num'>6.14</td><td class='num'>6.85</td><td class='num'>5.44</td><td class='num'>6.73</td></tr>
+<tr><td>Corridor 2</td><td class='mini'>a1b37c9a-c006-e04e-00ae-0000005b8d92</td><td class='num'>6.53</td><td class='num'>7.23</td><td class='num'>5.81</td><td class='num'>7.07</td></tr>
+<tr><td>Warehouse</td><td class='mini'>a1b39b89-c007-e05b-00cb-0000006acfd5</td><td class='num'>5.03</td><td class='num'>5.72</td><td class='num'>4.34</td><td class='num'>5.65</td></tr>
+<tr><td>Loading Dock</td><td class='mini'>a1b3ba78-c008-e068-00e8-0000007a1218</td><td class='num'>5.65</td><td class='num'>6.4</td><td class='num'>4.93</td><td class='num'>6.26</td></tr>
+<tr><td>Cafeteria</td><td class='mini'>a1b3d967-c009-e075-0105-00000089545b</td><td class='num'>4.92</td><td class='num'>5.67</td><td class='num'>4.21</td><td class='num'>5.5</td></tr>
+<tr><td>Elevator Hall</td><td class='mini'>a1b3f856-c00a-e082-0122-00000098969e</td><td class='num'>5.28</td><td class='num'>6</td><td class='num'>4.57</td><td class='num'>5.88</td></tr>
+<tr><td>Stairwell</td><td class='mini'>a1b41745-c00b-e08f-013f-000000a7d8e1</td><td class='num'>5.8</td><td class='num'>6.54</td><td class='num'>5.1</td><td class='num'>6.42</td></tr>
+<tr><td>Back Exit</td><td class='mini'>a1b43634-c00c-e09c-015c-000000b71b24</td><td class='num'>4.91</td><td class='num'>5.66</td><td class='num'>4.2</td><td class='num'>5.53</td></tr>
+<tr><td>Server Room</td><td class='mini'>a1b45523-c00d-e0a9-0179-000000c65d67</td><td class='num'>5.25</td><td class='num'>5.99</td><td class='num'>4.56</td><td class='num'>5.82</td></tr>
+<tr><td>Perimeter N</td><td class='mini'>a1b47412-c00e-e0b6-0196-000000d59faa</td><td class='num'>6.07</td><td class='num'>6.8</td><td class='num'>5.34</td><td class='num'>6.69</td></tr>
+<tr><td>Perimeter S</td><td class='mini'>a1b49301-c00f-e0c3-01b3-000000e4e1ed</td><td class='num'>5.89</td><td class='num'>6.61</td><td class='num'>5.14</td><td class='num'>6.43</td></tr></tbody></table></div>
+
+<div class="sec-title">Inference FPS over time</div>
+<div class="panel"><canvas id="cFps"></canvas></div>
+
+<div class="sec-title">Resource load over time</div>
+<div class="panel">
+<div class="legend">
+  <span><i style="background:var(--cpu)"></i>CPU %</span>
+  <span><i style="background:var(--ram)"></i>RAM %</span>
+  <span><i style="background:var(--igpu)"></i>iGPU %</span>
+  <span><i style="background:var(--npu)"></i>NPU %</span>
+  <span><i style="background:var(--nv)"></i>NVIDIA %</span>
+</div>
+<canvas id="cRes"></canvas></div>
+
+<div class="mini" style="margin-top:24px">Network Optix · NX AI Manager stress dashboard</div>
+</div>
+<script>
+function fmt(n){ if(n==null) return '–'; return (Math.round(n*10)/10).toString(); }
+function drawChart(cv, series, lines, opts){
+  opts = opts||{};
+  const dpr = window.devicePixelRatio||1;
+  const W = cv.clientWidth, H = opts.height||220;
+  cv.width = W*dpr; cv.height = H*dpr; cv.style.height = H+'px';
+  const ctx = cv.getContext('2d'); ctx.scale(dpr,dpr);
+  ctx.clearRect(0,0,W,H);
+  const padL=44, padR=44, padT=12, padB=22;
+  const plotW=W-padL-padR, plotH=H-padT-padB;
+  // axes ranges
+  let leftMax=1;
+  lines.filter(l=>l.axis==='left').forEach(l=>{
+    series.forEach(s=>{ const v=s[l.key]; if(v!=null&&v>leftMax) leftMax=v; });
+  });
+  leftMax = Math.ceil(leftMax*1.15) || 1;
+  const rightMax=100;
+  const n=series.length;
+  const x = i => padL + (n<=1?plotW/2:plotW*i/(n-1));
+  const yL = v => padT + plotH - plotH*(v/leftMax);
+  const yR = v => padT + plotH - plotH*(v/rightMax);
+  // grid + right axis labels (%)
+  ctx.strokeStyle='#2a3340'; ctx.fillStyle='#8b949e'; ctx.font='10px sans-serif';
+  ctx.lineWidth=1;
+  for(let g=0; g<=4; g++){
+    const yy=padT+plotH*g/4; ctx.beginPath(); ctx.moveTo(padL,yy); ctx.lineTo(W-padR,yy); ctx.stroke();
+    ctx.textAlign='right'; ctx.fillText(Math.round(rightMax*(1-g/4))+'%', W-6, yy+3);
+    ctx.textAlign='left'; ctx.fillText(fmt(leftMax*(1-g/4)), 4, yy+3);
+  }
+  // lines
+  lines.forEach(l=>{
+    const Y = l.axis==='left'?yL:yR;
+    ctx.beginPath(); ctx.strokeStyle=l.color; ctx.lineWidth=1.8;
+    let started=false;
+    series.forEach((s,i)=>{ const v=s[l.key]; if(v==null){return;}
+      const px=x(i), py=Y(v);
+      if(!started){ctx.moveTo(px,py);started=true;} else ctx.lineTo(px,py);
+    });
+    ctx.stroke();
+  });
+}
+
+const SERIES=[{"t": 0.0, "fps_total": 84.9, "cpu_pct": 78.0, "igpu_pct": 2.5, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.7}, {"t": 1.0, "fps_total": 86.15, "cpu_pct": 81.8, "igpu_pct": 2.6, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.1}, {"t": 2.0, "fps_total": 86.03, "cpu_pct": 79.6, "igpu_pct": 3.8, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.7}, {"t": 3.0, "fps_total": 86.29, "cpu_pct": 82.1, "igpu_pct": 2.2, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.5}, {"t": 4.0, "fps_total": 87.7, "cpu_pct": 79.5, "igpu_pct": 3.4, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.0}, {"t": 5.0, "fps_total": 88.09, "cpu_pct": 82.5, "igpu_pct": 3.5, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.7}, {"t": 6.0, "fps_total": 88.03, "cpu_pct": 81.5, "igpu_pct": 3.9, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.4}, {"t": 7.0, "fps_total": 90.55, "cpu_pct": 82.7, "igpu_pct": 1.8, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.5}, {"t": 8.0, "fps_total": 91.79, "cpu_pct": 83.5, "igpu_pct": 4.3, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.6}, {"t": 9.0, "fps_total": 91.01, "cpu_pct": 82.9, "igpu_pct": 2.5, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.3}, {"t": 10.0, "fps_total": 92.92, "cpu_pct": 84.1, "igpu_pct": 4.4, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.4}, {"t": 11.0, "fps_total": 93.8, "cpu_pct": 82.8, "igpu_pct": 2.2, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.3}, {"t": 12.0, "fps_total": 93.69, "cpu_pct": 81.6, "igpu_pct": 2.7, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.8}, {"t": 13.0, "fps_total": 94.53, "cpu_pct": 84.5, "igpu_pct": 2.6, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.7}, {"t": 14.0, "fps_total": 94.51, "cpu_pct": 83.6, "igpu_pct": 2.3, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.7}, {"t": 15.0, "fps_total": 94.23, "cpu_pct": 82.1, "igpu_pct": 3.5, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.7}, {"t": 16.0, "fps_total": 94.83, "cpu_pct": 84.8, "igpu_pct": 4.0, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.3}, {"t": 17.0, "fps_total": 96.94, "cpu_pct": 84.0, "igpu_pct": 4.4, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.0}, {"t": 18.0, "fps_total": 96.66, "cpu_pct": 82.8, "igpu_pct": 3.4, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.1}, {"t": 19.0, "fps_total": 96.38, "cpu_pct": 83.4, "igpu_pct": 1.9, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.6}, {"t": 20.0, "fps_total": 96.57, "cpu_pct": 84.5, "igpu_pct": 2.8, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.9}, {"t": 21.0, "fps_total": 96.62, "cpu_pct": 84.4, "igpu_pct": 2.1, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.1}, {"t": 22.0, "fps_total": 96.63, "cpu_pct": 83.2, "igpu_pct": 4.2, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.5}, {"t": 23.0, "fps_total": 96.35, "cpu_pct": 84.5, "igpu_pct": 1.5, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.4}, {"t": 24.0, "fps_total": 95.98, "cpu_pct": 84.1, "igpu_pct": 3.3, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.6}, {"t": 25.0, "fps_total": 96.2, "cpu_pct": 83.3, "igpu_pct": 3.5, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.5}, {"t": 26.0, "fps_total": 95.59, "cpu_pct": 83.8, "igpu_pct": 1.8, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.1}, {"t": 27.0, "fps_total": 94.3, "cpu_pct": 82.2, "igpu_pct": 4.3, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.1}, {"t": 28.0, "fps_total": 93.98, "cpu_pct": 83.3, "igpu_pct": 2.0, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.0}, {"t": 29.0, "fps_total": 93.13, "cpu_pct": 81.5, "igpu_pct": 4.0, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.5}, {"t": 30.0, "fps_total": 92.44, "cpu_pct": 83.3, "igpu_pct": 4.2, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.5}, {"t": 31.0, "fps_total": 91.94, "cpu_pct": 81.7, "igpu_pct": 3.5, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.6}, {"t": 32.0, "fps_total": 91.08, "cpu_pct": 82.7, "igpu_pct": 1.9, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.8}, {"t": 33.0, "fps_total": 89.3, "cpu_pct": 82.8, "igpu_pct": 1.9, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.0}, {"t": 34.0, "fps_total": 88.95, "cpu_pct": 79.3, "igpu_pct": 4.1, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.8}, {"t": 35.0, "fps_total": 89.4, "cpu_pct": 81.9, "igpu_pct": 1.7, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.8}, {"t": 36.0, "fps_total": 88.45, "cpu_pct": 80.1, "igpu_pct": 2.4, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.6}, {"t": 37.0, "fps_total": 88.04, "cpu_pct": 81.5, "igpu_pct": 1.7, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.2}, {"t": 38.0, "fps_total": 86.83, "cpu_pct": 79.7, "igpu_pct": 1.9, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.1}, {"t": 39.0, "fps_total": 85.42, "cpu_pct": 78.6, "igpu_pct": 3.4, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.9}, {"t": 40.0, "fps_total": 85.3, "cpu_pct": 80.3, "igpu_pct": 2.1, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.8}, {"t": 41.0, "fps_total": 85.66, "cpu_pct": 79.3, "igpu_pct": 4.0, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.6}, {"t": 42.0, "fps_total": 84.91, "cpu_pct": 80.8, "igpu_pct": 1.9, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.4}, {"t": 43.0, "fps_total": 84.67, "cpu_pct": 80.6, "igpu_pct": 2.5, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.0}, {"t": 44.0, "fps_total": 83.2, "cpu_pct": 79.5, "igpu_pct": 2.3, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.0}, {"t": 45.0, "fps_total": 83.72, "cpu_pct": 78.9, "igpu_pct": 4.4, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.3}, {"t": 46.0, "fps_total": 83.84, "cpu_pct": 79.9, "igpu_pct": 3.5, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.4}, {"t": 47.0, "fps_total": 81.5, "cpu_pct": 78.4, "igpu_pct": 3.2, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.5}, {"t": 48.0, "fps_total": 81.26, "cpu_pct": 77.9, "igpu_pct": 4.4, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.5}, {"t": 49.0, "fps_total": 83.47, "cpu_pct": 77.1, "igpu_pct": 1.6, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.9}, {"t": 50.0, "fps_total": 82.7, "cpu_pct": 79.3, "igpu_pct": 4.3, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.8}, {"t": 51.0, "fps_total": 81.88, "cpu_pct": 77.5, "igpu_pct": 3.8, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.4}, {"t": 52.0, "fps_total": 82.61, "cpu_pct": 78.4, "igpu_pct": 1.9, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.1}, {"t": 53.0, "fps_total": 84.11, "cpu_pct": 76.5, "igpu_pct": 3.0, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.7}, {"t": 54.0, "fps_total": 83.76, "cpu_pct": 77.0, "igpu_pct": 3.5, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.5}, {"t": 55.0, "fps_total": 83.5, "cpu_pct": 76.8, "igpu_pct": 3.7, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.0}, {"t": 56.0, "fps_total": 84.18, "cpu_pct": 77.0, "igpu_pct": 2.7, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.6}, {"t": 57.0, "fps_total": 85.8, "cpu_pct": 77.7, "igpu_pct": 3.3, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.0}, {"t": 58.0, "fps_total": 85.34, "cpu_pct": 78.7, "igpu_pct": 2.9, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.6}, {"t": 59.0, "fps_total": 86.92, "cpu_pct": 78.7, "igpu_pct": 4.1, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.0}, {"t": 60.0, "fps_total": 86.56, "cpu_pct": 77.0, "igpu_pct": 2.0, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.9}, {"t": 61.0, "fps_total": 87.21, "cpu_pct": 77.9, "igpu_pct": 2.8, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.4}, {"t": 62.0, "fps_total": 89.31, "cpu_pct": 75.7, "igpu_pct": 3.0, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.1}, {"t": 63.0, "fps_total": 89.45, "cpu_pct": 77.5, "igpu_pct": 3.1, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.6}, {"t": 64.0, "fps_total": 90.61, "cpu_pct": 76.3, "igpu_pct": 3.2, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.6}, {"t": 65.0, "fps_total": 90.7, "cpu_pct": 78.8, "igpu_pct": 3.2, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.9}, {"t": 66.0, "fps_total": 92.02, "cpu_pct": 78.7, "igpu_pct": 1.5, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.0}, {"t": 67.0, "fps_total": 92.47, "cpu_pct": 78.6, "igpu_pct": 3.5, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.8}, {"t": 68.0, "fps_total": 92.42, "cpu_pct": 78.3, "igpu_pct": 1.8, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.7}, {"t": 69.0, "fps_total": 93.99, "cpu_pct": 79.7, "igpu_pct": 3.9, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.4}, {"t": 70.0, "fps_total": 95.17, "cpu_pct": 77.6, "igpu_pct": 3.0, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.4}, {"t": 71.0, "fps_total": 95.43, "cpu_pct": 77.7, "igpu_pct": 2.1, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.7}, {"t": 72.0, "fps_total": 95.57, "cpu_pct": 80.7, "igpu_pct": 4.5, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.1}, {"t": 73.0, "fps_total": 96.11, "cpu_pct": 77.5, "igpu_pct": 2.5, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.1}, {"t": 74.0, "fps_total": 95.63, "cpu_pct": 78.6, "igpu_pct": 2.2, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.8}, {"t": 75.0, "fps_total": 96.79, "cpu_pct": 79.5, "igpu_pct": 3.9, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.6}, {"t": 76.0, "fps_total": 96.29, "cpu_pct": 81.3, "igpu_pct": 3.0, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.6}, {"t": 77.0, "fps_total": 96.14, "cpu_pct": 79.6, "igpu_pct": 2.3, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.3}, {"t": 78.0, "fps_total": 96.13, "cpu_pct": 82.2, "igpu_pct": 2.7, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.1}, {"t": 79.0, "fps_total": 95.91, "cpu_pct": 80.8, "igpu_pct": 2.3, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.4}, {"t": 80.0, "fps_total": 96.48, "cpu_pct": 80.2, "igpu_pct": 3.9, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.4}, {"t": 81.0, "fps_total": 95.2, "cpu_pct": 80.0, "igpu_pct": 2.6, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.7}, {"t": 82.0, "fps_total": 95.9, "cpu_pct": 80.7, "igpu_pct": 1.6, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.4}, {"t": 83.0, "fps_total": 94.59, "cpu_pct": 81.1, "igpu_pct": 1.7, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.0}, {"t": 84.0, "fps_total": 94.65, "cpu_pct": 82.1, "igpu_pct": 3.5, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.4}, {"t": 85.0, "fps_total": 93.43, "cpu_pct": 81.3, "igpu_pct": 1.5, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.9}, {"t": 86.0, "fps_total": 93.24, "cpu_pct": 80.8, "igpu_pct": 3.9, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.2}, {"t": 87.0, "fps_total": 92.39, "cpu_pct": 81.6, "igpu_pct": 3.2, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.0}, {"t": 88.0, "fps_total": 90.93, "cpu_pct": 82.2, "igpu_pct": 3.2, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.1}, {"t": 89.0, "fps_total": 90.83, "cpu_pct": 83.5, "igpu_pct": 3.3, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.3}, {"t": 90.0, "fps_total": 90.15, "cpu_pct": 81.1, "igpu_pct": 4.4, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.4}, {"t": 91.0, "fps_total": 89.22, "cpu_pct": 81.6, "igpu_pct": 2.5, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.0}, {"t": 92.0, "fps_total": 89.24, "cpu_pct": 82.0, "igpu_pct": 2.7, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.4}, {"t": 93.0, "fps_total": 88.67, "cpu_pct": 81.6, "igpu_pct": 1.9, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.6}, {"t": 94.0, "fps_total": 87.95, "cpu_pct": 82.2, "igpu_pct": 1.7, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.7}, {"t": 95.0, "fps_total": 86.36, "cpu_pct": 81.6, "igpu_pct": 1.7, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.0}, {"t": 96.0, "fps_total": 84.92, "cpu_pct": 81.5, "igpu_pct": 3.0, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.9}, {"t": 97.0, "fps_total": 84.69, "cpu_pct": 82.1, "igpu_pct": 4.5, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.5}, {"t": 98.0, "fps_total": 84.64, "cpu_pct": 81.3, "igpu_pct": 2.1, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.9}, {"t": 99.0, "fps_total": 83.43, "cpu_pct": 81.0, "igpu_pct": 2.7, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.5}, {"t": 100.0, "fps_total": 83.72, "cpu_pct": 82.5, "igpu_pct": 2.2, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.3}, {"t": 101.0, "fps_total": 83.46, "cpu_pct": 82.8, "igpu_pct": 4.2, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.3}, {"t": 102.0, "fps_total": 82.67, "cpu_pct": 83.6, "igpu_pct": 3.6, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.1}, {"t": 103.0, "fps_total": 83.72, "cpu_pct": 81.9, "igpu_pct": 4.3, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.7}, {"t": 104.0, "fps_total": 82.52, "cpu_pct": 82.1, "igpu_pct": 2.6, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.3}, {"t": 105.0, "fps_total": 82.7, "cpu_pct": 81.8, "igpu_pct": 2.2, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.5}, {"t": 106.0, "fps_total": 82.87, "cpu_pct": 81.7, "igpu_pct": 3.2, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.7}, {"t": 107.0, "fps_total": 82.2, "cpu_pct": 79.9, "igpu_pct": 3.6, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.8}, {"t": 108.0, "fps_total": 82.36, "cpu_pct": 80.7, "igpu_pct": 3.9, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.1}, {"t": 109.0, "fps_total": 83.54, "cpu_pct": 81.5, "igpu_pct": 2.1, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.9}, {"t": 110.0, "fps_total": 83.13, "cpu_pct": 81.0, "igpu_pct": 1.9, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.0}, {"t": 111.0, "fps_total": 84.09, "cpu_pct": 80.3, "igpu_pct": 1.8, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.2}, {"t": 112.0, "fps_total": 83.7, "cpu_pct": 80.8, "igpu_pct": 3.6, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.5}, {"t": 113.0, "fps_total": 85.35, "cpu_pct": 81.9, "igpu_pct": 3.4, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.5}, {"t": 114.0, "fps_total": 85.11, "cpu_pct": 80.5, "igpu_pct": 3.3, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.5}, {"t": 115.0, "fps_total": 86.58, "cpu_pct": 80.9, "igpu_pct": 2.4, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.4}, {"t": 116.0, "fps_total": 87.75, "cpu_pct": 80.3, "igpu_pct": 1.6, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.6}, {"t": 117.0, "fps_total": 87.32, "cpu_pct": 80.7, "igpu_pct": 3.8, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.7}, {"t": 118.0, "fps_total": 88.84, "cpu_pct": 77.0, "igpu_pct": 2.4, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.1}, {"t": 119.0, "fps_total": 88.01, "cpu_pct": 77.9, "igpu_pct": 2.3, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.9}, {"t": 120.0, "fps_total": 89.24, "cpu_pct": 78.8, "igpu_pct": 3.6, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.4}, {"t": 121.0, "fps_total": 91.45, "cpu_pct": 78.6, "igpu_pct": 3.6, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.2}, {"t": 122.0, "fps_total": 91.45, "cpu_pct": 78.6, "igpu_pct": 2.7, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.9}, {"t": 123.0, "fps_total": 92.85, "cpu_pct": 78.1, "igpu_pct": 2.9, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.0}, {"t": 124.0, "fps_total": 93.55, "cpu_pct": 75.6, "igpu_pct": 3.1, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.9}, {"t": 125.0, "fps_total": 93.7, "cpu_pct": 76.0, "igpu_pct": 3.1, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.4}, {"t": 126.0, "fps_total": 94.21, "cpu_pct": 76.9, "igpu_pct": 2.0, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.3}, {"t": 127.0, "fps_total": 94.75, "cpu_pct": 76.0, "igpu_pct": 2.9, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.0}, {"t": 128.0, "fps_total": 95.36, "cpu_pct": 75.7, "igpu_pct": 4.5, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.7}, {"t": 129.0, "fps_total": 95.67, "cpu_pct": 77.1, "igpu_pct": 2.8, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.9}, {"t": 130.0, "fps_total": 96.28, "cpu_pct": 75.4, "igpu_pct": 2.3, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.0}, {"t": 131.0, "fps_total": 95.79, "cpu_pct": 75.3, "igpu_pct": 2.0, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.9}, {"t": 132.0, "fps_total": 96.44, "cpu_pct": 78.0, "igpu_pct": 3.6, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.1}, {"t": 133.0, "fps_total": 97.52, "cpu_pct": 76.4, "igpu_pct": 3.5, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.3}, {"t": 134.0, "fps_total": 96.19, "cpu_pct": 75.9, "igpu_pct": 1.6, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.3}, {"t": 135.0, "fps_total": 97.74, "cpu_pct": 76.1, "igpu_pct": 3.4, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.9}, {"t": 136.0, "fps_total": 96.06, "cpu_pct": 78.9, "igpu_pct": 3.0, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.3}, {"t": 137.0, "fps_total": 96.07, "cpu_pct": 76.3, "igpu_pct": 3.2, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.6}, {"t": 138.0, "fps_total": 96.75, "cpu_pct": 77.0, "igpu_pct": 1.8, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.4}, {"t": 139.0, "fps_total": 95.04, "cpu_pct": 78.4, "igpu_pct": 3.7, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.9}, {"t": 140.0, "fps_total": 94.43, "cpu_pct": 77.5, "igpu_pct": 1.9, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.5}, {"t": 141.0, "fps_total": 93.5, "cpu_pct": 78.2, "igpu_pct": 3.0, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.0}, {"t": 142.0, "fps_total": 94.64, "cpu_pct": 76.5, "igpu_pct": 3.6, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.9}, {"t": 143.0, "fps_total": 92.47, "cpu_pct": 79.4, "igpu_pct": 2.1, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.8}, {"t": 144.0, "fps_total": 91.95, "cpu_pct": 76.8, "igpu_pct": 3.1, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.6}, {"t": 145.0, "fps_total": 91.34, "cpu_pct": 79.8, "igpu_pct": 3.7, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.8}, {"t": 146.0, "fps_total": 90.82, "cpu_pct": 80.3, "igpu_pct": 2.9, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.6}, {"t": 147.0, "fps_total": 89.88, "cpu_pct": 78.9, "igpu_pct": 4.2, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.0}, {"t": 148.0, "fps_total": 90.32, "cpu_pct": 78.3, "igpu_pct": 4.2, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.5}, {"t": 149.0, "fps_total": 88.15, "cpu_pct": 77.6, "igpu_pct": 1.9, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.7}, {"t": 150.0, "fps_total": 87.8, "cpu_pct": 80.3, "igpu_pct": 4.2, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.1}, {"t": 151.0, "fps_total": 87.17, "cpu_pct": 79.5, "igpu_pct": 2.0, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.4}, {"t": 152.0, "fps_total": 85.99, "cpu_pct": 81.0, "igpu_pct": 2.5, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.3}, {"t": 153.0, "fps_total": 86.0, "cpu_pct": 82.1, "igpu_pct": 1.8, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.4}, {"t": 154.0, "fps_total": 84.95, "cpu_pct": 79.7, "igpu_pct": 2.7, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.3}, {"t": 155.0, "fps_total": 84.24, "cpu_pct": 80.4, "igpu_pct": 4.3, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.9}, {"t": 156.0, "fps_total": 83.04, "cpu_pct": 80.6, "igpu_pct": 2.0, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.6}, {"t": 157.0, "fps_total": 83.66, "cpu_pct": 81.8, "igpu_pct": 4.2, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.9}, {"t": 158.0, "fps_total": 83.03, "cpu_pct": 80.8, "igpu_pct": 2.8, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.6}, {"t": 159.0, "fps_total": 82.75, "cpu_pct": 83.4, "igpu_pct": 2.8, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.8}, {"t": 160.0, "fps_total": 83.35, "cpu_pct": 83.1, "igpu_pct": 4.2, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.8}, {"t": 161.0, "fps_total": 81.82, "cpu_pct": 81.3, "igpu_pct": 2.9, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.4}, {"t": 162.0, "fps_total": 82.81, "cpu_pct": 83.2, "igpu_pct": 3.2, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.9}, {"t": 163.0, "fps_total": 82.3, "cpu_pct": 81.3, "igpu_pct": 3.1, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 43.8}, {"t": 164.0, "fps_total": 82.8, "cpu_pct": 81.3, "igpu_pct": 4.2, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.2}, {"t": 165.0, "fps_total": 83.43, "cpu_pct": 83.2, "igpu_pct": 3.6, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.8}, {"t": 166.0, "fps_total": 82.12, "cpu_pct": 84.0, "igpu_pct": 1.9, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.0}, {"t": 167.0, "fps_total": 83.82, "cpu_pct": 82.9, "igpu_pct": 3.2, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.7}, {"t": 168.0, "fps_total": 83.44, "cpu_pct": 84.8, "igpu_pct": 2.6, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.0}, {"t": 169.0, "fps_total": 83.42, "cpu_pct": 84.9, "igpu_pct": 2.4, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.8}, {"t": 170.0, "fps_total": 84.8, "cpu_pct": 81.4, "igpu_pct": 1.7, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.3}, {"t": 171.0, "fps_total": 86.54, "cpu_pct": 82.6, "igpu_pct": 3.8, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.0}, {"t": 172.0, "fps_total": 85.29, "cpu_pct": 83.9, "igpu_pct": 2.1, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.8}, {"t": 173.0, "fps_total": 87.1, "cpu_pct": 84.3, "igpu_pct": 3.0, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.4}, {"t": 174.0, "fps_total": 88.38, "cpu_pct": 84.7, "igpu_pct": 1.6, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.5}, {"t": 175.0, "fps_total": 88.52, "cpu_pct": 81.9, "igpu_pct": 2.5, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.5}, {"t": 176.0, "fps_total": 90.13, "cpu_pct": 83.6, "igpu_pct": 2.6, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.5}, {"t": 177.0, "fps_total": 90.36, "cpu_pct": 80.7, "igpu_pct": 2.1, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 45.9}, {"t": 178.0, "fps_total": 91.28, "cpu_pct": 81.2, "igpu_pct": 2.9, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 46.4}, {"t": 179.0, "fps_total": 91.99, "cpu_pct": 80.4, "igpu_pct": 4.0, "npu_pct": 0.0, "nvidia_pct": null, "ram_pct": 44.1}];
+function g(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+function draw(){
+  drawChart(document.getElementById('cFps'),SERIES,[
+    {key:'fps_total',color:g('--fps'),axis:'left'}],{height:240});
+  drawChart(document.getElementById('cRes'),SERIES,[
+    {key:'cpu_pct',color:g('--cpu'),axis:'right'},
+    {key:'ram_pct',color:g('--ram'),axis:'right'},
+    {key:'igpu_pct',color:g('--igpu'),axis:'right'},
+    {key:'npu_pct',color:g('--npu'),axis:'right'},
+    {key:'nvidia_pct',color:g('--nv'),axis:'right'}],{height:240});
+}
+draw(); window.addEventListener('resize',draw);
+</script>
+</body></html>

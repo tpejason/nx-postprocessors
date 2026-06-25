@@ -1,0 +1,22 @@
+[common]
+log_level = INFO
+
+[nx]
+url      = http://localhost:7001
+username = admin
+password = <NX_PASSWORD>
+
+[ollama]
+url   = http://<VM_IP>:11434
+model = gemma4:e4b
+
+[scanner]
+interval_active = 20
+interval_idle   = 60
+
+[web_app]
+port = 8115
+url  = http://<VM_IP>:8115
+
+[retention]
+days = 30

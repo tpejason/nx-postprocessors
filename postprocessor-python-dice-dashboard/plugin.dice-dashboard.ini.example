@@ -1,0 +1,18 @@
+[common]
+# Logging level: DEBUG | INFO | WARNING | ERROR
+log_level = INFO
+
+[detection]
+# Minimum detection confidence (0.0 – 1.0). Detections below this are discarded.
+confidence_threshold = 0.5
+# IoU threshold for non-maximum suppression. Overlapping boxes above this are suppressed.
+nms_iou_threshold = 0.5
+
+[dashboard]
+# TCP port for the web dashboard.
+port = 8081
+# Maximum number of confirmed rolls kept in the ring buffer.
+max_rolls = 200
+# Consecutive identical frames required before a roll is committed to history.
+# Also controls how many consecutive non-3-dice frames trigger the warning banner.
+debounce_frames = 3

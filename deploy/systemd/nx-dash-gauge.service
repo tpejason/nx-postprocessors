@@ -1,0 +1,15 @@
+[Unit]
+Description=Nx Gauge Dashboard web app (port 8113)
+After=network-online.target networkoptix-mediaserver.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=nx
+WorkingDirectory=/home/nx
+ExecStart=/usr/bin/python3 /home/nx/gauge_web_app.py --port 8113
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,18 @@
+[common]
+log_level = INFO
+
+[web_app]
+# URL the postprocessor POSTs per-camera frame counts to.
+url = http://localhost:8120
+
+[web_server]
+# Port the web app (web_app.py) listens on.
+port = 8120
+
+[nx]
+# Nx Server REST API, used to look up each camera's primary/secondary stream
+# resolution + fps for the per-camera report table. Best-effort: if unreachable
+# the report shows "n/a" for those columns. Point at the local server.
+url = https://127.0.0.1:7001
+user = admin
+password = admin

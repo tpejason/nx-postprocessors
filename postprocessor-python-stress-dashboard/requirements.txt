@@ -1,0 +1,7 @@
+# Postprocessor (runs under the AI Manager's Python):
+msgpack>=1.0.0
+
+# Web app (web_app.py) extra dependencies:
+psutil>=5.9.0
+# Optional — only needed on hosts with an NVIDIA GPU:
+nvidia-ml-py>=12.0.0

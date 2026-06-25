@@ -1,0 +1,76 @@
+{
+  "three_dice_small": {
+    "BBoxes_xyxy": {
+      "3": [120.0, 80.0, 180.0, 140.0],
+      "5": [200.0, 90.0, 258.0, 148.0],
+      "1": [280.0, 85.0, 342.0, 147.0]
+    },
+    "ObjectsMetaData": {
+      "3": {"Confidences": [0.92]},
+      "5": {"Confidences": [0.88]},
+      "1": {"Confidences": [0.95]}
+    },
+    "Width": 640,
+    "Height": 480
+  },
+  "three_dice_big": {
+    "BBoxes_xyxy": {
+      "4": [100.0, 100.0, 160.0, 160.0],
+      "5": [200.0, 100.0, 260.0, 160.0],
+      "6": [300.0, 100.0, 360.0, 160.0]
+    },
+    "ObjectsMetaData": {
+      "4": {"Confidences": [0.90]},
+      "5": {"Confidences": [0.85]},
+      "6": {"Confidences": [0.91]}
+    },
+    "Width": 640,
+    "Height": 480
+  },
+  "triple_threes": {
+    "BBoxes_xyxy": {
+      "3": [100.0, 100.0, 160.0, 160.0, 200.0, 100.0, 260.0, 160.0, 300.0, 100.0, 360.0, 160.0]
+    },
+    "ObjectsMetaData": {
+      "3": {"Confidences": [0.93, 0.89, 0.95]}
+    },
+    "Width": 640,
+    "Height": 480
+  },
+  "two_dice_only": {
+    "BBoxes_xyxy": {
+      "2": [100.0, 100.0, 160.0, 160.0],
+      "4": [200.0, 100.0, 260.0, 160.0]
+    },
+    "ObjectsMetaData": {
+      "2": {"Confidences": [0.88]},
+      "4": {"Confidences": [0.91]}
+    },
+    "Width": 640,
+    "Height": 480
+  },
+  "low_confidence": {
+    "BBoxes_xyxy": {
+      "3": [100.0, 100.0, 160.0, 160.0],
+      "5": [200.0, 100.0, 260.0, 160.0],
+      "1": [300.0, 100.0, 360.0, 160.0]
+    },
+    "ObjectsMetaData": {
+      "3": {"Confidences": [0.30]},
+      "5": {"Confidences": [0.25]},
+      "1": {"Confidences": [0.40]}
+    },
+    "Width": 640,
+    "Height": 480
+  },
+  "overlapping_boxes_nms": {
+    "BBoxes_xyxy": {
+      "6": [100.0, 100.0, 160.0, 160.0, 105.0, 102.0, 165.0, 162.0]
+    },
+    "ObjectsMetaData": {
+      "6": {"Confidences": [0.92, 0.60]}
+    },
+    "Width": 640,
+    "Height": 480
+  }
+}

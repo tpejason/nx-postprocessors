@@ -1,0 +1,15 @@
+[Unit]
+Description=Nx Web Dashboard Advance (port 8112)
+After=network-online.target networkoptix-mediaserver.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=networkoptix
+WorkingDirectory=/opt/networkoptix/mediaserver/var/nx_ai_manager/nxai_manager/postprocessors
+ExecStart=/usr/bin/python3 /opt/networkoptix/mediaserver/var/nx_ai_manager/nxai_manager/postprocessors/web-dashboard-advance-app.py --port 8112
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

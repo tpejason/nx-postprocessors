@@ -1,0 +1,15 @@
+[Unit]
+Description=Nx Parking Dashboard web app (port 8114)
+After=network-online.target networkoptix-mediaserver.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=nx
+WorkingDirectory=/home/nx
+ExecStart=/usr/bin/python3 /home/nx/parking_web_app.py --port 8114
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
