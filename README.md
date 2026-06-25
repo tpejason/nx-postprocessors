@@ -2,6 +2,51 @@
 
 Custom postprocessors for NX AI Manager.
 
+## Quick Start
+
+Each postprocessor is a self-contained Python **external postprocessor** for NX AI
+Manager. To run any of them after cloning:
+
+```bash
+git clone https://github.com/tpejason/nx-postprocessors.git
+cd nx-postprocessors/postprocessor-python-<name>   # e.g. postprocessor-python-web-dashboard-advance
+```
+
+1. **Create your config from the template.** Every postprocessor ships a
+   `plugin.*.ini.example`. Copy it and fill in **your own** values:
+   ```bash
+   cp plugin.<name>.ini.example plugin.<name>.ini
+   ```
+   Edit the `[nx]` section with your Nx Server URL, username, and password:
+   ```ini
+   [nx]
+   url      = https://<YOUR_NX_SERVER>:7001
+   username = <YOUR_USERNAME>
+   password = <YOUR_PASSWORD>
+   ```
+   > The code reads these from the `.ini` at runtime (`cfg.get('nx', ...)`); the
+   > `<...>` placeholders in the templates are **meant to be replaced** — nothing is
+   > hard-coded to a specific server.
+
+2. **Place the config where AI Manager expects it.** The web apps read the `.ini`
+   from the AI Manager `etc/` directory (i.e. `../etc/plugin.<name>.ini` relative
+   to the script). Copy your filled-in `.ini` there.
+
+3. **Register the postprocessor** with AI Manager by adding it to
+   `external_postprocessors.json` (Name, Command = the launcher script, SocketPath,
+   Events), then restart the mediaserver so it spawns the feeder. See each
+   postprocessor's own README for the exact entry.
+
+4. **Open the dashboard** at `http://<your-server-ip>:<port>` (ports listed in the
+   table below) and, in the Nx client, select the postprocessor on the target
+   camera(s).
+
+> **Deploy scripts** (`deploy.sh`, `scripts/dev_watch.py`) are convenience helpers
+> that originally targeted the author's lab. Pass your own host/credentials as
+> arguments, or edit the `<SERVER_IP>` / `<SSH_PASSWORD>` placeholders inside them
+> before use. They are **not** required to run a postprocessor — only to automate
+> remote deployment.
+
 ## Credentials & Security
 
 > ⚠️ These postprocessors ship with **default placeholder credentials** for demo
