@@ -506,6 +506,14 @@ class DetectionStore:
                 (thumbnail_data, camera_id)
             )
 
+    def cameras_needing_thumbnail(self):
+        """Camera ids that have no thumbnail stored yet."""
+        with self._connect() as conn:
+            rows = conn.execute(
+                "SELECT camera_id FROM cameras WHERE thumbnail IS NULL OR thumbnail = ''"
+            ).fetchall()
+        return [r[0] for r in rows]
+
     def get_filtered_timeline(self, start, end, classes=None, camera_id=None):
         """
         Return per-minute aggregated counts per class between start and end.
@@ -1028,6 +1036,31 @@ def start_flush_thread(interval_secs):
         except Exception as e:
             logger.error("Final flush error: %s", e, exc_info=True)
     Thread(target=run, daemon=True, name="flush").start()
+
+
+# ── Background auto-thumbnail thread ───────────────────────────────────────────
+
+def start_thumbnail_thread(interval_secs=30):
+    """Auto-capture an Nx snapshot for any camera that has no thumbnail yet, so the
+    heatmap card backgrounds populate WITHOUT any manual click. Runs only when the
+    [nx] section is configured; a newly-appearing camera gets its thumbnail within
+    one interval. Cameras that already have a thumbnail are skipped (no re-fetch)."""
+    def run():
+        # brief initial delay so the feeder can register cameras first
+        if shutdown_event.wait(timeout=5):
+            return
+        while True:
+            try:
+                if NX_PASS:
+                    for cam_id in store.cameras_needing_thumbnail():
+                        if shutdown_event.is_set():
+                            break
+                        _capture_nx_thumbnail(cam_id)
+            except Exception as e:
+                logger.error("Auto-thumbnail error: %s", e, exc_info=True)
+            if shutdown_event.wait(timeout=interval_secs):
+                break
+    Thread(target=run, daemon=True, name="thumbnail").start()
 
 
 # ── Server lifecycle ───────────────────────────────────────────────────────────
@@ -2317,6 +2350,7 @@ if __name__ == '__main__':
     signal.signal(signal.SIGINT,  signal_handler)
 
     start_flush_thread(DEFAULT_FLUSH_SECS)
+    start_thumbnail_thread()
 
     try:
         start_web_server(port)
