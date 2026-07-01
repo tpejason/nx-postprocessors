@@ -30,7 +30,7 @@ logging.basicConfig(
 DEFAULT_PORT   = 8114
 NUM_SPACES     = 6
 VACATE_TIMEOUT = 3.0    # seconds of no detection before marking space vacated
-COOLDOWN_SECS  = 120.0  # cooldown period after vacating (2 minutes)
+COOLDOWN_SECS  = 30.0   # cooldown period after vacating (30 seconds)
 
 shutdown_event = Event()
 web_server     = None

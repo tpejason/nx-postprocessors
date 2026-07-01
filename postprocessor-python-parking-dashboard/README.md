@@ -30,7 +30,7 @@ with other post-processors.
 |------------------|-------|---------------------------------------------------------------|
 | `NUM_SPACES`     | 6     | Parking spaces P1–P6 (split frame width into 6 equal columns)  |
 | `VACATE_TIMEOUT` | 3 s   | No detection in a space for this long → space marked **vacated** |
-| `COOLDOWN_SECS`  | 120 s | After a space vacates, new detections are ignored for 2 min    |
+| `COOLDOWN_SECS`  | 30 s | After a space vacates, new detections are ignored for 30 s    |
 
 - A space becomes **OCCUPIED** when a vehicle is detected in its column; a
   session (with a unique id and start time) is opened.

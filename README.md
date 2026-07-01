@@ -148,7 +148,7 @@ transparent pass-through (does not modify inference results).
 Maps vehicle detections (Car / Bus / Truck) to six parking spaces (P1–P6) by
 horizontal position and serves a live occupancy dashboard: per-space state and
 duration, a manual **Mark Free** override, and usage statistics. Occupancy uses
-a 3 s vacate timeout + 2 min cooldown to avoid flicker. See
+a 3 s vacate timeout + 30 s cooldown to avoid flicker. See
 [its README](postprocessor-python-parking-dashboard/README.md).
 
 **Port:** 8114
